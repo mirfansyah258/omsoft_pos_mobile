@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:omsoft_pos_mobile/components/MyTextField.dart';
 import 'package:omsoft_pos_mobile/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -43,36 +44,40 @@ class _MyHomePageState extends State<Login> {
         "password":_passwordController.text
       };
 
-      var response = await http.post(Uri.parse(loginUrl),
-          headers: {"Content-Type":"application/json"},
-          body: jsonEncode(reqBody)
-      );
-
-      var jsonResponse = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        var username = jsonResponse['data']['username'];
-        var firstName = jsonResponse['data']['first_name'];
-        var lastName = jsonResponse['data']['last_name'];
-        var token = jsonResponse['data']['token'];
-
-        prefs.setString('username', username);
-        prefs.setString('firstName', firstName);
-        prefs.setString('lastName', lastName);
-        prefs.setString('token', token);
-        // Navigator.push(context, MaterialPageRoute(builder: (context)=>Home(token: myToken)));
-        Navigator.of(context).pushReplacementNamed('/home');
-      } else {
-        print('Login failed');
-        var errorMsg = jsonResponse['errors'];
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorMsg)),
+      try {
+        var response = await http.post(Uri.parse(loginUrl),
+            headers: {"Content-Type":"application/json"},
+            body: jsonEncode(reqBody)
         );
 
+        var jsonResponse = jsonDecode(response.body);
+        if (response.statusCode == 200) {
+          var username = jsonResponse['data']['username'];
+          var firstName = jsonResponse['data']['first_name'];
+          var lastName = jsonResponse['data']['last_name'];
+          var token = jsonResponse['data']['token'];
+
+          prefs.setString('username', username);
+          prefs.setString('firstName', firstName);
+          prefs.setString('lastName', lastName);
+          prefs.setString('token', token);
+          // Navigator.push(context, MaterialPageRoute(builder: (context)=>Home(token: myToken)));
+          Navigator.of(context).pushReplacementNamed('/home');
+        } else {
+          print('Login failed');
+          var errorMsg = jsonResponse['errors'];
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errorMsg)),
+          );
+
+        }
+      } catch (err) {
+        print('error http');
+        print(err.toString());
       }
 
     }
   }
-
 
   @override
   void dispose() {
@@ -118,39 +123,19 @@ class _MyHomePageState extends State<Login> {
                 child: Column(
                   children: <Widget>[
                     // Email input form
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          const Text(
-                            'Email',
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.all(10),
-                              isDense: true,
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.blue,
-                                  ),
-                                  borderRadius: BorderRadius.all(Radius.circular(5))
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter your email';
-                              }
-                              if (!isValidEmail(value)) {
-                                return 'Invalid email address';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 10),
-                        ]
+                    MyTextField(
+                      label: 'Email',
+                      isRequired: true,
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (!isValidEmail(value)) {
+                          return 'Invalid email address';
+                        }
+                        return null;
+                      },
                     ),
+
                     // Password input form
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

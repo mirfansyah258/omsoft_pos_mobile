@@ -11,20 +11,41 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  String? username;
+  String? firstName;
+  String? lastName;
+  String? token;
+
   getPref() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    var token = pref.getString("token");
-    print('token: $token');
+    token = pref.getString("token");
+    print('token:');
+    print(token);
     if (token == null) {
-      Navigator.of(context, rootNavigator: true).pop();
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => const Login(title: 'Login'),
-        ),
-            (route) => false,
-      );
+      goToLoginPage();
     }
+
+    username = pref.getString("username");
+    firstName = pref.getString("firstName");
+    lastName = pref.getString("lastName");
+  }
+
+  logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+
+    goToLoginPage();
+  }
+
+  void goToLoginPage() {
+    Navigator.of(context, rootNavigator: true).pop();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => const Login(title: 'Login'),
+      ),
+          (route) => false,
+    );
   }
 
   @override
@@ -45,6 +66,45 @@ class _HomeState extends State<Home> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('Home'),
         centerTitle: true,
+      ),
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints viewportConstraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: viewportConstraints.maxHeight,
+                minWidth: viewportConstraints.maxWidth,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('username: ${username!}'),
+                      Text('firstName: $firstName'),
+                      Text('lastName: $lastName'),
+                      Text('token: $token'),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      FilledButton(
+                          onPressed: () {
+                            print('Logout');
+                            logout();
+                          },
+                          child: const Text('Logout')
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
