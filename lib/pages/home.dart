@@ -1,4 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:omsoft_pos_mobile/config.dart';
+import 'package:omsoft_pos_mobile/pages/home/dashboard.dart';
+import 'package:omsoft_pos_mobile/pages/sales/menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login.dart';
@@ -11,34 +15,36 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String? username;
-  String? firstName;
-  String? lastName;
-  String? token;
-  bool isLoading = true;
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle = TextStyle(fontSize: 12, fontWeight: FontWeight.bold);
+  static const List<Widget> _widgetOptions = <Widget>[
+    Dashboard(),
+    SalesMenu(),
+    // Text(
+    //   'Dashboard',
+    //   style: optionStyle,
+    // ),
+    // Text(
+    //   'Penjualan Kasir & Back Office',
+    //   style: optionStyle,
+    // ),
+    Text(
+      'Pembelian Stok',
+      style: optionStyle,
+    ),
+    Text(
+      'Persediaan Stok',
+      style: optionStyle,
+    ),
+  ];
 
-  Future getPref() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    token = pref.getString("token");
-    print('token:');
-    print(token);
-    await Future.delayed(const Duration(seconds: 1));
-    if (token == null) {
-      goToLoginPage();
-    }
+  void _onItemTapped(int index) {
     setState(() {
-      isLoading = false;
+      _selectedIndex = index;
     });
-
-    username = pref.getString("username");
-    firstName = pref.getString("firstName");
-    lastName = pref.getString("lastName");
   }
 
   logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
-
     goToLoginPage();
   }
 
@@ -53,64 +59,52 @@ class _HomeState extends State<Home> {
     );
   }
 
-  @override
-  void initState() {
-    getPref();
-    super.initState();
-  }
-
-  @override
-  dispose() {
-    super.dispose();
+  void signOut () {
+    FirebaseAuth.instance.signOut();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Home'),
+        backgroundColor: darkBlue,
+        title: const Text('POS Mobile'),
+        foregroundColor: Colors.white,
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: signOut,
+            icon: const Icon(Icons.logout_outlined)
+          )
+        ],
       ),
-      body: isLoading ? const Center(child: CircularProgressIndicator(),) : LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints viewportConstraints) {
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: viewportConstraints.maxHeight,
-                minWidth: viewportConstraints.maxWidth,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('username: $username'),
-                      Text('firstName: $firstName'),
-                      Text('lastName: $lastName'),
-                      Text('token: $token'),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      FilledButton(
-                          onPressed: () {
-                            print('Logout');
-                            logout();
-                          },
-                          child: const Text('Logout')
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          );
-        },
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.store_outlined),
+            label: 'Sales',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.local_shipping_outlined),
+            label: 'Purchase',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.inventory_2_outlined),
+            label: 'Stock',
+          ),
+        ],
+        backgroundColor: darkBlue,
+        currentIndex: _selectedIndex,
+        selectedItemColor: yellow,
+        unselectedItemColor: Colors.white,
+        onTap: _onItemTapped,
       ),
+      body: _widgetOptions.elementAt(_selectedIndex),
     );
   }
 }

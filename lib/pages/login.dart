@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:omsoft_pos_mobile/components/MyTextField.dart';
 import 'package:omsoft_pos_mobile/config.dart';
+import 'package:omsoft_pos_mobile/pages/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -47,46 +49,41 @@ class _MyHomePageState extends State<Login> {
         }
       );
 
-      var reqBody = {
-        "username":_emailController.text,
-        "password":_passwordController.text
-      };
-
       try {
-        var response = await http.post(Uri.parse(loginUrl),
-            headers: {"Content-Type":"application/json"},
-            body: jsonEncode(reqBody)
+        final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: _emailController.text,
+            password: _passwordController.text
         );
 
-        var jsonResponse = jsonDecode(response.body);
-        if (response.statusCode == 200) {
-          var username = jsonResponse['data']['username'];
-          var firstName = jsonResponse['data']['first_name'];
-          var lastName = jsonResponse['data']['last_name'];
-          var token = jsonResponse['data']['token'];
-
-          prefs.setString('username', username);
-          prefs.setString('firstName', firstName);
-          prefs.setString('lastName', lastName);
-          prefs.setString('token', token);
-          // Navigator.push(context, MaterialPageRoute(builder: (context)=>Home(token: myToken)));
-          Navigator.of(context).pushReplacementNamed('/home');
-        } else {
-          print('Login failed');
-          var errorMsg = jsonResponse['errors'];
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(errorMsg)),
-          );
-
+        Navigator.pop(context);
+      } on FirebaseAuthException catch (e) {
+        Navigator.pop(context);
+        print('error msg ${e.message}');
+        print('error code ${e.code}');
+        var msg = 'Error SignIn';
+        if (e.code == 'user-not-found') {
+          print('No user found for that email.');
+          setState(() {
+            msg = 'No user found for that email.';
+          });
+        } else if (e.code == 'wrong-password') {
+          print('Wrong password provided for that user.');
+          setState(() {
+            msg = 'Wrong password provided for that user.';
+          });
+        } else if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
+          print('INVALID_LOGIN_CREDENTIALS');
+          setState(() {
+            msg = 'Invalid Login Credentials.';
+          });
         }
-      } catch (err) {
-        print('error http');
-        print(err.toString());
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('error http')),
+          SnackBar(
+            content: Text(msg),
+            duration: const Duration(seconds: 2),
+          ),
         );
       }
-
     }
   }
 
@@ -106,7 +103,6 @@ class _MyHomePageState extends State<Login> {
       //   title: Text(widget.title),
       //   centerTitle: true,
       // ),
-      backgroundColor: Colors.blue[100],
       body: SafeArea(
         child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {
@@ -117,85 +113,85 @@ class _MyHomePageState extends State<Login> {
                 minWidth: viewportConstraints.maxWidth,
               ),
               child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // login logo
-                      Padding(
-                        padding: const EdgeInsets.all(25.0),
-                        child: Column(
-                          children: [
-                            Image.asset('assets/images/cat.png'),
-                            const Text(
-                              'Kucing Peduli',
-                              style: TextStyle(
-                                  fontSize: 20
-                              ),
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // login logo
+                    Padding(
+                      padding: const EdgeInsets.all(25.0),
+                      child: Column(
+                        children: [
+                          Image.asset('assets/images/cat.png'),
+                          const Text(
+                            'Kucing Peduli',
+                            style: TextStyle(
+                                fontSize: 20
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      // form input
-                      Form(
-                        key: _formKey,
-                        child: Column(
-                          children: <Widget>[
-                            // Email input form
-                            MyTextField(
-                              label: 'Email',
-                              isRequired: true,
-                              controller: _emailController,
-                              keyboardType: TextInputType.emailAddress,
-                              validator: (value) {
-                                if (!isValidEmail(value)) {
-                                  return 'Invalid email address';
-                                }
-                                return null;
-                              },
+                    ),
+                    // form input
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          // Email input form
+                          MyTextField(
+                            label: 'Email',
+                            isRequired: true,
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) {
+                              if (!isValidEmail(value)) {
+                                return 'Invalid email address';
+                              }
+                              return null;
+                            },
+                          ),
+
+                          // Password input form
+                          MyTextField(
+                            label: 'Password',
+                            isRequired: true,
+                            controller: _passwordController,
+                            keyboardType: TextInputType.visiblePassword,
+                            obscureText: true
+                          ),
+
+                          const SizedBox(height: 25),
+
+                          // Submit button
+                          FilledButton(
+                            onPressed: () {
+                              // Validate returns true if the form is valid, or false otherwise.
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
+                                // You can now use _email and _password for authentication
+                                // For this example, we'll just print them
+                                print('Email: ${_emailController.text}');
+                                print('Password: ${_passwordController.text}');
+
+                                // Navigator.of(context).pushReplacementNamed('/home');
+                                loginUser();
+                              }
+                            },
+                            style: FilledButton.styleFrom(
+                              backgroundColor: darkBlue,
+                              foregroundColor: yellow,
+                              padding: EdgeInsets.zero,
+                              minimumSize: const Size.fromHeight(50),
+                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5)))
                             ),
-
-                            // Password input form
-                            MyTextField(
-                                label: 'Password',
-                                isRequired: true,
-                                controller: _passwordController,
-                                keyboardType: TextInputType.visiblePassword,
-                                obscureText: true
-                            ),
-
-                            const SizedBox(height: 25),
-
-                            // Submit button
-                            FilledButton(
-                              onPressed: () {
-                                // Validate returns true if the form is valid, or false otherwise.
-                                if (_formKey.currentState!.validate()) {
-                                  _formKey.currentState!.save();
-                                  // You can now use _email and _password for authentication
-                                  // For this example, we'll just print them
-                                  print('Email: ${_emailController.text}');
-                                  print('Password: ${_passwordController.text}');
-
-                                  // Navigator.of(context).pushReplacementNamed('/home');
-                                  loginUser();
-                                }
-                              },
-                              style: FilledButton.styleFrom(
-                                // backgroundColor: Colors.blue,
-                                  foregroundColor: Colors.yellow,
-                                  padding: EdgeInsets.zero,
-                                  minimumSize: const Size.fromHeight(50),
-                                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5)))
-                              ),
-                              child: const Text('Submit'),
-                            ),
-                          ],
-                        ),
+                            child: const Text('Login'),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+              ),
             ),
           );
         }

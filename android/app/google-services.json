@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "901416996063",
+    "project_id": "my-sandbox-8c7e5",
+    "storage_bucket": "my-sandbox-8c7e5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901416996063:android:fbf2373305673e1d336d6a",
+        "android_client_info": {
+          "package_name": "com.omsoftpos.mobile.omsoft_pos_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9qtVF1vYLoi5qthYt22_FAuG0X7kVbXc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
