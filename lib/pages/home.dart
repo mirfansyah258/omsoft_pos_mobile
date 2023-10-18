@@ -15,7 +15,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle = TextStyle(fontSize: 12, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
     SalesMenu(),
@@ -59,15 +58,24 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: darkBlue,
-        title: const Text('POS Mobile'),
-        foregroundColor: Colors.white,
-        centerTitle: true,
+        title: const Text(
+          'POS Mobile',
+          style: TextStyle(
+            color: titleYellow
+          ),
+        ),
         actions: [
           IconButton(
             onPressed: signOut,
-            icon: const Icon(Icons.logout_outlined)
+            icon: const Icon(Icons.logout_outlined),
+            color: Colors.white,
           )
         ],
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(24),
+          ),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         // type: BottomNavigationBarType.fixed,
@@ -98,6 +106,7 @@ class _HomeState extends State<Home> {
         selectedFontSize: 16,
         unselectedItemColor: const Color.fromRGBO(133, 182, 255, 1),
         onTap: _onItemTapped,
+        
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
     );

@@ -1,12 +1,8 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:omsoft_pos_mobile/components/MyTextField.dart';
 import 'package:omsoft_pos_mobile/config.dart';
-import 'package:omsoft_pos_mobile/pages/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({super.key, required this.title});
@@ -51,8 +47,8 @@ class _MyHomePageState extends State<Login> {
 
       try {
         final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: _emailController.text,
-            password: _passwordController.text
+          email: _emailController.text,
+          password: _passwordController.text
         );
 
         Navigator.pop(context);
@@ -122,9 +118,10 @@ class _MyHomePageState extends State<Login> {
                       padding: const EdgeInsets.all(25.0),
                       child: Column(
                         children: [
-                          Image.asset('assets/images/cat.png'),
+                          Image.asset('assets/images/cat.png', scale: 1.5,),
+                          SizedBox(height: 10,),
                           const Text(
-                            'Kucing Peduli',
+                            'POS Mobile',
                             style: TextStyle(
                                 fontSize: 20
                             ),

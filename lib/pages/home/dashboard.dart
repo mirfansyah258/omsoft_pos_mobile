@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:omsoft_pos_mobile/pages/home/lineChart.dart';
+import 'package:omsoft_pos_mobile/pages/home/topProducts.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -10,21 +12,10 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints viewportConstraints) {
-        return SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: viewportConstraints.maxHeight,
-              minWidth: viewportConstraints.maxWidth,
-            ),
-            child: Container(
-              alignment: Alignment.center,
-              child: Image.network('https://media.tenor.com/nBt6RZkFJh8AAAAi/never-gonna.gif'),
-            )
-          ),
-        );
-      },
+    return ListView(
+      children: <Widget>[
+        TopProducts()
+      ],
     );
   }
 }
