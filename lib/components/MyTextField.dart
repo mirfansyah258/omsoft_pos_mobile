@@ -6,6 +6,7 @@ class MyTextField extends StatefulWidget {
   final TextEditingController controller;
   final TextInputType keyboardType;
   final validator;
+  final bool obscureText;
 
   const MyTextField({
     super.key,
@@ -13,7 +14,8 @@ class MyTextField extends StatefulWidget {
     this.isRequired = false,
     required this.controller,
     this.keyboardType = TextInputType.text,
-    this.validator
+    this.validator = null,
+    this.obscureText = false,
   });
 
   @override
@@ -29,6 +31,7 @@ class _MyTextFieldState extends State<MyTextField> {
         Text(widget.label),
         const SizedBox(height: 10),
         TextFormField(
+          obscureText: widget.obscureText,
           controller: widget.controller,
           keyboardType: widget.keyboardType,
           decoration: const InputDecoration(
@@ -46,12 +49,15 @@ class _MyTextFieldState extends State<MyTextField> {
               if (value == null || value.isEmpty) {
                 return '${widget.label} is required';
               }
-              return widget.validator(value);
+              if (widget.validator != null) {
+                return widget.validator(value);
+              }
             }
 
             return null;
           },
         ),
+        const SizedBox(height: 10),
       ],
     );
   }

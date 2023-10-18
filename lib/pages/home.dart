@@ -15,15 +15,20 @@ class _HomeState extends State<Home> {
   String? firstName;
   String? lastName;
   String? token;
+  bool isLoading = true;
 
-  getPref() async {
+  Future getPref() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     token = pref.getString("token");
     print('token:');
     print(token);
+    await Future.delayed(const Duration(seconds: 1));
     if (token == null) {
       goToLoginPage();
     }
+    setState(() {
+      isLoading = false;
+    });
 
     username = pref.getString("username");
     firstName = pref.getString("firstName");
@@ -67,7 +72,7 @@ class _HomeState extends State<Home> {
         title: const Text('Home'),
         centerTitle: true,
       ),
-      body: LayoutBuilder(
+      body: isLoading ? const Center(child: CircularProgressIndicator(),) : LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {
           return SingleChildScrollView(
             child: ConstrainedBox(
@@ -82,7 +87,7 @@ class _HomeState extends State<Home> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('username: ${username!}'),
+                      Text('username: $username'),
                       Text('firstName: $firstName'),
                       Text('lastName: $lastName'),
                       Text('token: $token'),
