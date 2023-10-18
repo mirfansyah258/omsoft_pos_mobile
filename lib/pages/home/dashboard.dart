@@ -20,7 +20,7 @@ class _DashboardState extends State<Dashboard> {
             ),
             child: Container(
               alignment: Alignment.center,
-              child: const Text('Dashboard'),
+              child: Image.network('https://media.tenor.com/nBt6RZkFJh8AAAAi/never-gonna.gif'),
             )
           ),
         );

@@ -2,10 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:omsoft_pos_mobile/config.dart';
 import 'package:omsoft_pos_mobile/pages/home/dashboard.dart';
+import 'package:omsoft_pos_mobile/pages/purchase/menu.dart';
 import 'package:omsoft_pos_mobile/pages/sales/menu.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'login.dart';
+import 'package:omsoft_pos_mobile/pages/stock/menu.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -20,22 +19,8 @@ class _HomeState extends State<Home> {
   static const List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
     SalesMenu(),
-    // Text(
-    //   'Dashboard',
-    //   style: optionStyle,
-    // ),
-    // Text(
-    //   'Penjualan Kasir & Back Office',
-    //   style: optionStyle,
-    // ),
-    Text(
-      'Pembelian Stok',
-      style: optionStyle,
-    ),
-    Text(
-      'Persediaan Stok',
-      style: optionStyle,
-    ),
+    PurchaseMenu(),
+    StockMenu(),
   ];
 
   void _onItemTapped(int index) {
@@ -44,23 +29,29 @@ class _HomeState extends State<Home> {
     });
   }
 
-  logout() async {
-    goToLoginPage();
-  }
-
-  void goToLoginPage() {
-    Navigator.of(context, rootNavigator: true).pop();
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => const Login(title: 'Login'),
-      ),
-          (route) => false,
-    );
-  }
-
   void signOut () {
-    FirebaseAuth.instance.signOut();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Warning'),
+          content: const Text('Are you sure want to sign out?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, 'OK');
+                FirebaseAuth.instance.signOut();
+              },
+              child: const Text('Sign Out'),
+            ),
+          ],
+        );
+      }
+    );
   }
 
   @override
@@ -79,29 +70,33 @@ class _HomeState extends State<Home> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
+        // type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
+            icon: Icon(Icons.home_outlined, size: 28,),
             label: 'Home',
+            backgroundColor: darkBlue,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.store_outlined),
+            icon: Icon(Icons.store_outlined, size: 28,),
             label: 'Sales',
+            backgroundColor: darkBlue,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.local_shipping_outlined),
+            icon: Icon(Icons.local_shipping_outlined, size: 28,),
             label: 'Purchase',
+            backgroundColor: darkBlue,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.inventory_2_outlined),
+            icon: Icon(Icons.inventory_2_outlined, size: 28,),
             label: 'Stock',
+            backgroundColor: darkBlue,
           ),
         ],
-        backgroundColor: darkBlue,
         currentIndex: _selectedIndex,
         selectedItemColor: yellow,
-        unselectedItemColor: Colors.white,
+        selectedFontSize: 16,
+        unselectedItemColor: const Color.fromRGBO(133, 182, 255, 1),
         onTap: _onItemTapped,
       ),
       body: _widgetOptions.elementAt(_selectedIndex),

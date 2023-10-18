@@ -1,43 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:omsoft_pos_mobile/config.dart';
 
-class SalesMenu extends StatefulWidget {
-  const SalesMenu({super.key});
+class StockMenu extends StatefulWidget {
+  const StockMenu({super.key});
 
   @override
-  State<SalesMenu> createState() => _SalesMenuState();
+  State<StockMenu> createState() => _StockMenuState();
 }
 
-class _SalesMenuState extends State<SalesMenu> {
-  final salesMenu = <Map>[
+class _StockMenuState extends State<StockMenu> {
+  final stockMenu = <Map>[
     {
       'id': '1',
-      'label': 'Penjualan Kasir',
-      'icon': Icons.storefront_outlined,
+      'label': 'Stok Masuk Lain-Lain',
+      'icon': Icons.input_outlined,
       'route': ''
     },
     {
       'id': '2',
-      'label': 'Order Penjualan',
-      'icon': Icons.shopping_cart_outlined,
+      'label': 'Stok Keluar Lain-Lain',
+      'icon': Icons.output_outlined,
       'route': ''
     },
     {
       'id': '3',
-      'label': 'Nota / Faktur Penjualan',
-      'icon': Icons.request_quote_outlined,
+      'label': 'Mutasi Barang',
+      'icon': Icons.move_up_outlined,
       'route': ''
     },
     {
       'id': '4',
-      'label': 'Retur Penjualan',
-      'icon': Icons.autorenew_outlined,
-      'route': ''
-    },
-    {
-      'id': '5',
-      'label': 'Pembayaran Piutang',
-      'icon': Icons.payments_outlined,
+      'label': 'Stok Opname',
+      'icon': Icons.checklist_rtl_outlined,
       'route': ''
     },
   ];
@@ -51,15 +45,15 @@ class _SalesMenuState extends State<SalesMenu> {
       padding: const EdgeInsets.all(10),
       shrinkWrap: true,
       childAspectRatio: (1 / .8),
-      children: List.generate(5, (idx) {
+      children: List.generate(4, (idx) {
         return Padding(
           padding: const EdgeInsets.all(10),
           child: GestureDetector(
             onTap: () {
-              print('TAP ${salesMenu[idx]['label']}');
+              print('TAP ${stockMenu[idx]['label']}');
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('${salesMenu[idx]['label']} Coming Soon'),
+                  content: Text('${stockMenu[idx]['label']} Coming Soon'),
                   duration: const Duration(seconds: 2),
                 ),
               );
@@ -76,18 +70,18 @@ class _SalesMenuState extends State<SalesMenu> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(
-                    salesMenu[idx]['icon'],
+                    stockMenu[idx]['icon'],
                     size: 50,
                     color: darkBlue,
                   ),
                   const SizedBox(height: 10,),
                   Text(
-                    salesMenu[idx]['label'],
+                    stockMenu[idx]['label'],
                     textAlign: TextAlign.center,
 
                     style: const TextStyle(
-                      fontSize: 15,
-                      color: darkBlue
+                        fontSize: 15,
+                        color: darkBlue
                     )
                   ),
                 ],
