@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+const appName = 'OMSOFT POS';
 const baseUrl = 'https://0938-118-136-25-108.ngrok.io';
 const loginUrl = '$baseUrl/login';
 

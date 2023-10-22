@@ -59,56 +59,62 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         backgroundColor: darkBlue,
         title: const Text(
-          'POS Mobile',
+          'OMSOFT',
           style: TextStyle(
-            color: titleYellow
+            color: titleYellow,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 4
           ),
         ),
+        centerTitle: true,
         actions: [
           IconButton(
             onPressed: signOut,
             icon: const Icon(Icons.logout_outlined),
-            color: Colors.white,
           )
         ],
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(24),
-          ),
-        ),
+        // shape: const RoundedRectangleBorder(
+        //   borderRadius: BorderRadius.vertical(
+        //     bottom: Radius.circular(24),
+        //   ),
+        // ),
+        iconTheme: const IconThemeData(color: titleYellow),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        // type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined, size: 28,),
-            label: 'Home',
-            backgroundColor: darkBlue,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.store_outlined, size: 28,),
-            label: 'Sales',
-            backgroundColor: darkBlue,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_shipping_outlined, size: 28,),
-            label: 'Purchase',
-            backgroundColor: darkBlue,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.inventory_2_outlined, size: 28,),
-            label: 'Stock',
-            backgroundColor: darkBlue,
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: yellow,
-        selectedFontSize: 16,
-        unselectedItemColor: const Color.fromRGBO(133, 182, 255, 1),
-        onTap: _onItemTapped,
-        
+      drawer: Drawer(
+
       ),
-      body: _widgetOptions.elementAt(_selectedIndex),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   // type: BottomNavigationBarType.fixed,
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home_outlined, size: 28,),
+      //       label: 'Home',
+      //       backgroundColor: darkBlue,
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.store_outlined, size: 28,),
+      //       label: 'Sales',
+      //       backgroundColor: darkBlue,
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.local_shipping_outlined, size: 28,),
+      //       label: 'Purchase',
+      //       backgroundColor: darkBlue,
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.inventory_2_outlined, size: 28,),
+      //       label: 'Stock',
+      //       backgroundColor: darkBlue,
+      //     ),
+      //   ],
+      //   currentIndex: _selectedIndex,
+      //   selectedItemColor: yellow,
+      //   selectedFontSize: 16,
+      //   unselectedItemColor: const Color.fromRGBO(133, 182, 255, 1),
+      //   onTap: _onItemTapped,
+      // ),
+      // body: _widgetOptions.elementAt(_selectedIndex),
+      body: Dashboard(),
     );
   }
 }

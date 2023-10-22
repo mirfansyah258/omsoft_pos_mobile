@@ -22,15 +22,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'OMSOFT POS',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         scaffoldBackgroundColor: bgBlue,
         useMaterial3: true,
+        fontFamily: 'LexendDeca',
       ),
       home: const AuthUser(),
       routes: {
-        '/login': (context) => const Login(title: 'Login',),
+        '/login': (context) => const Login(),
         '/home': (context) => const Home(),
       },
     );

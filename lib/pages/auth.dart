@@ -15,7 +15,7 @@ class AuthUser extends StatelessWidget {
           if (snapshot.hasData) {
             return const Home();
           } else {
-            return const Login(title: 'title');
+            return const Login();
           }
         },
       ),

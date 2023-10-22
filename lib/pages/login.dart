@@ -5,9 +5,7 @@ import 'package:omsoft_pos_mobile/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key, required this.title});
-
-  final String title;
+  const Login({super.key});
 
   @override
   State<Login> createState() => _MyHomePageState();
@@ -94,11 +92,6 @@ class _MyHomePageState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      //   title: Text(widget.title),
-      //   centerTitle: true,
-      // ),
       body: SafeArea(
         child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {
@@ -121,7 +114,7 @@ class _MyHomePageState extends State<Login> {
                           Image.asset('assets/images/cat.png', scale: 1.5,),
                           SizedBox(height: 10,),
                           const Text(
-                            'POS Mobile',
+                            appName,
                             style: TextStyle(
                                 fontSize: 20
                             ),
