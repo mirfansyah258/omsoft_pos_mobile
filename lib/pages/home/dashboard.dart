@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:omsoft_pos_mobile/pages/home/lineChart.dart';
+import 'package:omsoft_pos_mobile/pages/home/summary.dart';
 import 'package:omsoft_pos_mobile/pages/home/topProducts.dart';
 
 class Dashboard extends StatefulWidget {
@@ -14,7 +15,8 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
-        TopProducts()
+        // TopProducts()
+        Summary()
       ],
     );
   }
