@@ -30,7 +30,89 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void signOut () {
+  // Nav Drawer Main Items
+  final menuItem = <Map>[
+    {'idx': 0, 'label': 'Dashboard', 'svg': 'dashboard-24.svg', 'route': ''},
+    {'idx': 1, 'label': 'Cashier', 'svg': 'cart-24.svg', 'route': ''},
+    {'idx': 2, 'label': 'Inventory', 'svg': 'package-24.svg', 'route': ''},
+    {'idx': 3, 'label': 'Report', 'svg': 'report-24.svg', 'route': ''},
+  ];
+
+  List<Widget> _drawerItem() {
+    var widget = <Widget>[
+      const ListTile(
+        title: Text(
+          'Menu',
+          style: TextStyle(fontWeight: FontWeight.w300, color: darkYellow),
+        ),
+      )
+    ];
+    for (var i = 0; i < menuItem.length; i++) {
+      widget.add(ListTile(
+        leading: SvgPicture.asset(
+          "assets/svg/${menuItem[i]['svg']}",
+          semanticsLabel: menuItem[i]['label']
+        ),
+        title: Text(
+          menuItem[i]['label'],
+          style: const TextStyle(fontSize: 16, color: yellow),
+        ),
+        selected: _selectedIndex == menuItem[i]['idx'],
+        onTap: () {
+          // Update the state of the app
+          _onItemTapped(menuItem[i]['idx']);
+          // Then close the drawer
+          Navigator.pop(context);
+        },
+        selectedTileColor: const Color.fromRGBO(133, 182, 255, 0.25),
+        shape: const StadiumBorder(),
+      ));
+    }
+    return widget;
+  }
+
+  // Nav Drawer Footer Items
+  final footerItems = <Map>[
+    {'idx': 5, 'label': 'Settings', 'svg': 'setting-24.svg', 'route': ''},
+    {'idx': 6, 'label': 'Logout', 'svg': 'logout-24.svg', 'route': ''},
+  ];
+
+  List<Widget> _drawerFooterItem() {
+    var widget = <Widget>[
+      const Divider(
+        height: 0,
+        color: yellow,
+      )
+    ];
+    for (var i = 0; i < footerItems.length; i++) {
+      widget.add(ListTile(
+        leading: SvgPicture.asset(
+          "assets/svg/${footerItems[i]['svg']}",
+          semanticsLabel: footerItems[i]['label']
+        ),
+        title: Text(
+          footerItems[i]['label'],
+          style: const TextStyle(fontSize: 16, color: yellow),
+        ),
+        selected: _selectedIndex == footerItems[i]['idx'],
+        onTap: () {
+          // close the drawer
+          Navigator.pop(context);
+          // Then update the state of the app
+          if (i == (footerItems.length - 1)) {
+            signOut();
+          } else {
+            _onItemTapped(footerItems[i]['idx']);
+          }
+        },
+        selectedTileColor: const Color.fromRGBO(133, 182, 255, 0.25),
+        shape: const StadiumBorder(),
+      ));
+    }
+    return widget;
+  }
+
+  void signOut() {
     showDialog(
       context: context,
       builder: (context) {
@@ -75,11 +157,6 @@ class _HomeState extends State<Home> {
             icon: const Icon(Icons.logout_outlined),
           )
         ],
-        // shape: const RoundedRectangleBorder(
-        //   borderRadius: BorderRadius.vertical(
-        //     bottom: Radius.circular(24),
-        //   ),
-        // ),
         iconTheme: const IconThemeData(color: titleYellow),
       ),
       drawer: Drawer(
@@ -88,6 +165,7 @@ class _HomeState extends State<Home> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,62 +191,11 @@ class _HomeState extends State<Home> {
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.zero,
-                  children: [
-                    const ListTile(
-                      title: Text(
-                        'Menu',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w300,
-                          color: darkYellow
-                        ),
-                      ),
-                    ),
-                    ListTile(
-                      leading: SvgPicture.asset(
-                        'assets/svg/dashboard-24.svg',
-                        semanticsLabel: 'Dashboard'
-                      ),
-                      title: const Text(
-                        'Dashboard',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: yellow
-                        ),
-                      ),
-                      selected: _selectedIndex == 0,
-                      onTap: () {
-                        // Update the state of the app
-                        _onItemTapped(0);
-                        // Then close the drawer
-                        Navigator.pop(context);
-                      },
-                      selectedTileColor: Color.fromRGBO(133, 182, 255, 0.25),
-                      shape: StadiumBorder(),
-                    ),
-                    ListTile(
-                      leading: SvgPicture.asset(
-                        'assets/svg/cart-24.svg',
-                        semanticsLabel: 'Cashier'
-                      ),
-                      title: const Text(
-                        'Cashier',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: yellow
-                        ),
-                      ),
-                      selected: _selectedIndex == 1,
-                      onTap: () {
-                        // Update the state of the app
-                        _onItemTapped(1);
-                        // Then close the drawer
-                        Navigator.pop(context);
-                      },
-                      selectedTileColor: Color.fromRGBO(133, 182, 255, 0.25),
-                      shape: StadiumBorder(),
-                    )
-                  ],
+                  children: _drawerItem(),
                 ),
+              ),
+              Column(
+                children: _drawerFooterItem(),
               )
             ],
           ),
