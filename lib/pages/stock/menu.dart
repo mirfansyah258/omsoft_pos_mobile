@@ -46,7 +46,7 @@ class _StockMenuState extends State<StockMenu> {
       padding: const EdgeInsets.all(10),
       shrinkWrap: true,
       childAspectRatio: (1 / .8),
-      children: List.generate(4, (idx) {
+      children: List.generate(stockMenu.length, (idx) {
         return MenuItem(item: stockMenu[idx]);
       }),
     );

@@ -1,5 +1,10 @@
+import 'dart:convert';
+
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:omsoft_pos_mobile/components/MyTextField.dart';
 import 'package:omsoft_pos_mobile/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,13 +24,36 @@ class _MyHomePageState extends State<Login> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  // final _db = FirebaseFirestore.instance;
+
   late SharedPreferences prefs;
+  String ipAddress = "";
 
   @override
   void initState() {
     super.initState();
 
     initSharedPrefs();
+  }
+
+  Future<void> fetchIPAddress() async {
+    try {
+      final response = await http.get(Uri.parse('https://httpbin.org/ip'));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          ipAddress = data['origin'];
+        });
+      } else {
+        setState(() {
+          ipAddress = "Failed to fetch IP";
+        });
+      }
+    } catch (e) {
+      setState(() {
+        ipAddress = "Error: $e";
+      });
+    }
   }
 
   void initSharedPrefs() async {
@@ -47,9 +75,15 @@ class _MyHomePageState extends State<Login> {
         final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text
-        );
+        ).whenComplete(() async {
+          // await _db.collection("Users").add({
+          //   "email": _emailController.text,
+          //   "ipAddress": ipAddress,
+          //   "origin": "unknown"
+          // });
 
-        Navigator.pop(context);
+          Navigator.pop(context);
+        });
       } on FirebaseAuthException catch (e) {
         Navigator.pop(context);
         print('error msg ${e.message}');

@@ -45,7 +45,7 @@ class _PurchaseMenuState extends State<PurchaseMenu> {
       padding: const EdgeInsets.all(10),
       shrinkWrap: true,
       childAspectRatio: (1 / .8),
-      children: List.generate(4, (idx) {
+      children: List.generate(purchaseMenu.length, (idx) {
         return MenuItem(item: purchaseMenu[idx]);
       }),
     );

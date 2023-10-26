@@ -5,7 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:omsoft_pos_mobile/config.dart';
 import 'package:omsoft_pos_mobile/pages/home/dashboard.dart';
 import 'package:omsoft_pos_mobile/pages/purchase/menu.dart';
-import 'package:omsoft_pos_mobile/pages/sales/menu.dart';
+import 'package:omsoft_pos_mobile/pages/salesBackOffice/menu.dart';
+import 'package:omsoft_pos_mobile/pages/salesCashier/menu.dart';
+import 'package:omsoft_pos_mobile/pages/settings/menu.dart';
 import 'package:omsoft_pos_mobile/pages/stock/menu.dart';
 
 class Home extends StatefulWidget {
@@ -19,9 +21,11 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
-    SalesMenu(),
+    SalesCashierMenu(),
+    SalesBackOfficeMenu(),
     PurchaseMenu(),
     StockMenu(),
+    SettingMenu()
   ];
 
   void _onItemTapped(int index) {
@@ -33,9 +37,10 @@ class _HomeState extends State<Home> {
   // Nav Drawer Main Items
   final menuItem = <Map>[
     {'idx': 0, 'label': 'Dashboard', 'svg': 'dashboard-24.svg', 'route': ''},
-    {'idx': 1, 'label': 'Cashier', 'svg': 'cart-24.svg', 'route': ''},
-    {'idx': 2, 'label': 'Inventory', 'svg': 'package-24.svg', 'route': ''},
-    {'idx': 3, 'label': 'Report', 'svg': 'report-24.svg', 'route': ''},
+    {'idx': 1, 'label': 'Penjualan Kasir', 'svg': 'cart-24.svg', 'route': ''},
+    {'idx': 2, 'label': 'Penjualan Back Office', 'svg': 'cart-24.svg', 'route': ''},
+    {'idx': 3, 'label': 'Pembelian Stok', 'svg': 'package-24.svg', 'route': ''},
+    {'idx': 4, 'label': 'Persediaan', 'svg': 'report-24.svg', 'route': ''},
   ];
 
   List<Widget> _drawerItem() {
@@ -73,8 +78,8 @@ class _HomeState extends State<Home> {
 
   // Nav Drawer Footer Items
   final footerItems = <Map>[
-    {'idx': 5, 'label': 'Settings', 'svg': 'setting-24.svg', 'route': ''},
-    {'idx': 6, 'label': 'Logout', 'svg': 'logout-24.svg', 'route': ''},
+    {'idx': 5, 'label': 'Pengaturan', 'svg': 'setting-24.svg', 'route': ''},
+    {'idx': 6, 'label': 'Keluar', 'svg': 'logout-24.svg', 'route': ''},
   ];
 
   List<Widget> _drawerFooterItem() {
@@ -133,8 +138,7 @@ class _HomeState extends State<Home> {
             ),
           ],
         );
-      }
-    );
+      });
   }
 
   @override
@@ -153,8 +157,10 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: signOut,
-            icon: const Icon(Icons.logout_outlined),
+            onPressed: () {},
+            icon: CircleAvatar(
+              backgroundImage: AssetImage('assets/images/profpic.jpeg'),
+            )
           )
         ],
         iconTheme: const IconThemeData(color: titleYellow),
