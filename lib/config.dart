@@ -10,3 +10,6 @@ const bgBoxBlue = Color.fromRGBO(213, 233, 255, 1);
 const yellow = Color.fromRGBO(227, 221, 74, 0.83);
 const titleYellow = Color.fromRGBO(203, 197, 67, 1);
 const darkYellow = Color.fromRGBO(174, 170, 86, 1);
+const grey = Color.fromRGBO(144, 149, 157, 1);
+const green = Color.fromRGBO(0, 165, 54, 1);
+const red = Color.fromRGBO(186, 0, 0, 1);

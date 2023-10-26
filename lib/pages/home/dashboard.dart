@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:omsoft_pos_mobile/pages/home/lineChart.dart';
+import 'package:omsoft_pos_mobile/pages/home/stockHistory.dart';
 import 'package:omsoft_pos_mobile/pages/home/summary.dart';
 import 'package:omsoft_pos_mobile/pages/home/topProducts.dart';
 
@@ -14,9 +15,12 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: <Widget>[
+      padding: const EdgeInsets.all(16),
+      children: const <Widget>[
         // TopProducts()
-        Summary()
+        Summary(),
+        SizedBox(height: 32,),
+        StockHistory(),
       ],
     );
   }

@@ -158,7 +158,7 @@ class _HomeState extends State<Home> {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: CircleAvatar(
+            icon: const CircleAvatar(
               backgroundImage: AssetImage('assets/images/profpic.jpeg'),
             )
           )
